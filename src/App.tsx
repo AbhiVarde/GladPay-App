@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./index.css";
 import CardManagement from "./Pages/CardManagement";
+import SelectApp from "./Pages/Select";
 
 export const BalanceContext = React.createContext<number>(0);
 
@@ -34,6 +35,7 @@ function App() {
               path="/add-money"
               element={<AddMoney onAmountAdded={handleAmountAdded} />}
             />
+            <Route path="/select" element={<SelectApp />} />
             <Route path="/card-management" element={<CardManagement />} />
           </Routes>
         </BalanceContext.Provider>
