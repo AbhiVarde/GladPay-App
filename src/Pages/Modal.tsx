@@ -5,22 +5,16 @@ interface ModalProps {
   onClose: () => void;
   onTimeSave: (
     times: { open: string; close: string }[],
-    selectedDay: number
+    selectedDay: number[]
   ) => void;
   initialTime: { open: string; close: string }[];
 }
 
 const days = ["S", "M", "T", "W", "T", "F", "S"];
 
-const Modal: React.FC<ModalProps> = ({
-  day,
-  onClose,
-  onTimeSave,
-  initialTime,
-}) => {
+const Modal = ({ day, onClose, onTimeSave, initialTime }: ModalProps) => {
   const [times, setTimes] = useState([...initialTime]);
-  const [selectedDays, setSelectedDays] = useState<number[]>([day]);
-
+  const [selectedDay, setSelectedDay] = useState<number[]>([day]);
   const handleAddClick = () => {
     setTimes([...times, { open: "", close: "" }]);
   };
@@ -32,11 +26,11 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   const handleDayClick = (index: number) => {
-    setSelectedDays((prevSelectedDays) => {
-      if (prevSelectedDays.includes(index)) {
-        return prevSelectedDays.filter((day) => day !== index);
+    setSelectedDay((prevSelectedDay) => {
+      if (prevSelectedDay.includes(index)) {
+        return prevSelectedDay.filter((day) => day !== index);
       } else {
-        return [...prevSelectedDays, index];
+        return [...prevSelectedDay, index];
       }
     });
   };
@@ -48,11 +42,11 @@ const Modal: React.FC<ModalProps> = ({
           Select Open and Close time for {days[day]}
         </p>
         <div className="flex gap-2">
-          {days.map((_, index) => (
+          {days.map((day, index) => (
             <p
               key={index}
               className={`${
-                selectedDays.includes(index)
+                selectedDay.includes(index)
                   ? "bg-blue-500 text-white"
                   : "bg-gray-300 text-black"
               } py-2 px-4 my-2 cursor-pointer`}
@@ -87,25 +81,25 @@ const Modal: React.FC<ModalProps> = ({
               />
             </div>
             {index > 0 && (
-              <p
+              <button
                 className="my-1 cursor-pointer"
                 onClick={() => handleRemoveClick(index)}
               >
                 Remove
-              </p>
+              </button>
             )}
           </div>
         ))}
-        <p className="my-4 cursor-pointer" onClick={handleAddClick}>
+        <button className="my-4 cursor-pointer" onClick={handleAddClick}>
           Add hours
-        </p>
+        </button>
         <div className="flex justify-between gap-2">
           <button className="bg-black/25 py-2 px-4 w-1/2" onClick={onClose}>
             Cancel
           </button>
           <button
             className="bg-black/25 py-2 px-4 w-1/2"
-            onClick={() => onTimeSave(times, day)}
+            onClick={() => onTimeSave(times, selectedDay)}
           >
             Save
           </button>
