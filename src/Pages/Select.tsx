@@ -11,7 +11,7 @@ const days = [
   "Saturday",
 ];
 
-const SelectApp: React.FC = () => {
+const SelectApp = () => {
   const [modal, setModal] = useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number>(-1);
   const [timeSlots, setTimeSlots] = useState([
@@ -24,12 +24,14 @@ const SelectApp: React.FC = () => {
     [{ open: "", close: "" }],
   ]);
 
-  const handleOnSave = (
+  const handleOnSave = async(
     times: { open: string; close: string }[],
-    selectedDay: number
+    selectedDay: number[],
   ) => {
     const selectedTimeSlots = [...timeSlots];
-    selectedTimeSlots[selectedDay] = [...times];
+    await selectedDay && await selectedDay.length > 0 && await selectedDay.map((day)=> {
+      selectedTimeSlots[day] = [...times];
+    })
     setTimeSlots(selectedTimeSlots);
     setModal(false);
   };
@@ -47,9 +49,8 @@ const SelectApp: React.FC = () => {
           {days.map((day, index) => (
             <div className="flex justify-between gap-2" key={index}>
               <p>{day}</p>
-              <div></div>
               <p
-                className="cursor-pointer"
+                className="cursor-pointer flex flex-col"
                 onClick={() => handleDayClick(index)}
               >
                 {timeSlots[index].map((slot, idx) => (
